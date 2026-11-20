@@ -45,7 +45,7 @@ td{padding:8px;border-top:1px solid var(--bd);vertical-align:top;font-size:12.5p
 <div class="kpis" id="kpis"></div>
 <div class="row">
 <div class="card"><b>Status sertifikat</b><div id="byStatus"></div></div>
-<div class="card"><b>Jumlah timbangan per DAOP</b><div id="byDaop"></div></div>
+<div class="card"><b>Jumlah timbangan per DAOP/DIVRE</b><div id="byDaop"></div></div>
 <div class="card"><b>Segera ditindaklanjuti (terdekat)</b><div id="soon"></div></div>
 </div>
 <div class="tools">
@@ -97,7 +97,7 @@ var pr=s<=7?"SANGAT URGENT":s<=30?"TINGGI":"NORMAL";
 return Object.assign({},x,{sisa:s,status:st,prio:pr})}
 function fmt(s){var m=["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"],d=iso2d(s);return d.getDate()+" "+m[d.getMonth()]+" "+d.getFullYear()}
 function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
-var COLS=[["jenis","Jenis Timbangan"],["kap","Kapasitas (KG)"],["wil","Wilayah"],["daop","Daop"],["no","No. Sertifikat"],["terbit","Tgl Sertifikat"],["akhir","Tgl Berakhir"],["status","Status"],["sisa","Sisa Hari"],["prio","Prioritas"],["lem","Lembaga Pengujian Tera"]];
+var COLS=[["jenis","Jenis Timbangan"],["kap","Kapasitas (KG)"],["wil","Wilayah"],["daop","Daop/Divre"],["no","No. Sertifikat"],["terbit","Tgl Sertifikat"],["akhir","Tgl Berakhir"],["status","Status"],["sisa","Sisa Hari"],["prio","Prioritas"],["lem","Lembaga Pengujian Tera"]];
 $("thead").innerHTML="<th>No</th>"+COLS.map(function(c){return'<th data-k="'+c[0]+'">'+c[1]+"</th>"}).join("");
 $("thead").onclick=function(e){var k=e.target.dataset&&e.target.dataset.k;if(!k)return;sortD=sortK===k?-sortD:1;sortK=k;render()};
 function cls(st){return st==="BERLAKU"?"s-ok":st==="SEGERA BERAKHIR"?"s-warn":"s-exp"}
@@ -112,14 +112,14 @@ $("kpis").innerHTML=[["Total timbangan",all.length,""],["Berlaku",n(function(x){
 .map(function(k){return'<div class="card kpi"><span>'+k[0]+"</span><b"+(k[2]?' style="color:'+k[2]+'"':"")+">"+k[1]+"</b></div>"}).join("");
 bars("byStatus",[["Berlaku",n(function(x){return x.status==="BERLAKU"}),"var(--ok)"],["Segera berakhir",n(function(x){return x.status==="SEGERA BERAKHIR"}),"var(--warn)"],["Kadaluarsa",n(function(x){return x.status==="KADALUARSA"}),"#777"]]);
 var dm={};all.forEach(function(x){dm[x.daop]=(dm[x.daop]||0)+1});
-bars("byDaop",Object.keys(dm).sort().map(function(k){return[k,dm[k]]}),"var(--ac)");
+bars("byDaop",Object.keys(dm).sort(function(a,b){return a.localeCompare(b,"id",{numeric:true})}).map(function(k){return[k,dm[k]]}),"var(--ac)");
 var sn=all.slice().sort(function(a,b){return a.sisa-b.sisa}).slice(0,5);
 $("soon").innerHTML=sn.map(function(x){return'<div class="bar"><em style="width:auto;flex:1;color:var(--tx)">'+esc(x.wil)+'</em><span class="b '+(x.sisa<0?"s-exp":x.sisa<=7?"s-bad":x.sisa<=30?"s-warn":"s-ok")+'">'+(x.sisa<0?"lewat "+(-x.sisa):x.sisa)+" hari</span></div>"}).join("");
 $("tb").innerHTML=rows.map(function(x,i){return"<tr><td>"+(i+1)+"</td><td>"+esc(x.jenis)+"</td><td>"+Number(x.kap).toLocaleString("id-ID")+"</td><td>"+esc(x.wil)+"</td><td>"+esc(x.daop)+"</td><td>"+esc(x.no)+"</td><td>"+fmt(x.terbit)+"</td><td>"+fmt(x.akhir)+'</td><td><span class="b '+cls(x.status)+'">'+x.status+"</span></td><td>"+x.sisa+'</td><td><span class="b '+(x.prio==="SANGAT URGENT"?"s-bad":x.prio==="TINGGI"?"s-warn":"s-ok")+'">'+x.prio+"</span></td><td>"+esc(x.lem)+"</td></tr>"}).join("")||'<tr><td colspan="12">Tidak ada data.</td></tr>';
 var d=new Date();$("clock").textContent="Diperbarui otomatis · "+d.toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" "+d.toLocaleTimeString("id-ID")+(META?" · Data Google Sheets diambil: "+new Date(META).toLocaleString("id-ID"):"")+MSG}
 function fillJenis(){var s=$("fJenis"),v=s.value,l=[];data.forEach(function(x){if(x.jenis&&l.indexOf(x.jenis)<0)l.push(x.jenis)});l.sort();s.innerHTML='<option value="">Semua Jenis Timbangan</option>'+l.map(function(k){return"<option>"+esc(k)+"</option>"}).join("");s.value=v}
-function fillDaop(){fillJenis();var s=$("fDaop"),v=s.value,l=[];data.forEach(function(x){if(l.indexOf(x.daop)<0)l.push(x.daop)});l.sort();
-s.innerHTML='<option value="">Semua DAOP</option>'+l.map(function(k){return"<option>"+esc(k)+"</option>"}).join("");s.value=v}
+function fillDaop(){fillJenis();var s=$("fDaop"),v=s.value,l=[];data.forEach(function(x){if(l.indexOf(x.daop)<0)l.push(x.daop)});l.sort(function(a,b){return a.localeCompare(b,"id",{numeric:true})});
+s.innerHTML='<option value="">Semua DAOP/DIVRE</option>'+l.map(function(k){return"<option>"+esc(k)+"</option>"}).join("");s.value=v}
 function toIso(v){if(v instanceof Date)return v.getFullYear()+"-"+("0"+(v.getMonth()+1)).slice(-2)+"-"+("0"+v.getDate()).slice(-2);
 if(/^\d{4}-\d{2}-\d{2}/.test(String(v)))return String(v).slice(0,10);var m={jan:1,feb:2,mar:3,apr:4,mei:5,may:5,jun:6,jul:7,agu:8,aug:8,sep:9,okt:10,oct:10,nov:11,des:12,dec:12};
 var p=String(v).trim().split(/[-\/ ]/);if(p.length===3){var mo=isNaN(p[1])?m[p[1].toLowerCase().slice(0,3)]:+p[1],y=+p[2]<100?2000+ +p[2]:+p[2];if(mo)return y+"-"+("0"+mo).slice(-2)+"-"+("0"+p[0]).slice(-2)}return null}

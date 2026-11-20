@@ -46,7 +46,7 @@ td{padding:8px;border-top:1px solid var(--bd);vertical-align:top;font-size:12.5p
 <div class="row">
 <div class="card"><b>Status sertifikat</b><div id="byStatus"></div></div>
 <div class="card"><b>Jumlah timbangan per DAOP/DIVRE</b><div id="byDaop"></div></div>
-<div class="card"><b>Segera ditindaklanjuti (Kadaluarsa dan Sangat Urgent)</b><div id="soon" style="max-height:260px;overflow-y:auto;padding-right:6px"></div></div>
+<div class="card"><b>Segera Ditindaklanjuti</b><div id="soon" style="max-height:260px;overflow-y:auto;padding-right:6px"></div></div>
 </div>
 <div class="card" style="margin-top:12px"><b>Sebaran jenis timbangan per DAOP/DIVRE</b><div id="byJenis"></div></div>
 <div class="tools">
@@ -120,7 +120,7 @@ $("kpis").innerHTML=[["Total timbangan",all.length,""],["Berlaku",n(function(x){
 donut("byStatus",[["Berlaku",n(function(x){return x.status==="BERLAKU"}),"var(--ok)"],["Segera berakhir",n(function(x){return x.status==="SEGERA BERAKHIR"}),"var(--warn)"],["Kadaluarsa",n(function(x){return x.status==="KADALUARSA"}),"#777"]]);
 var dm={};all.forEach(function(x){dm[x.daop]=(dm[x.daop]||0)+1});
 bars("byDaop",Object.keys(dm).sort(function(a,b){return a.localeCompare(b,"id",{numeric:true})}).map(function(k){return[k,dm[k]]}),"var(--ac)");
-var sn=all.filter(function(x){return x.sisa<=7}).sort(function(a,b){return a.sisa-b.sisa});
+var sn=all.filter(function(x){return x.sisa<=31}).sort(function(a,b){return a.sisa-b.sisa});
 $("soon").innerHTML=sn.map(function(x){return'<div class="bar"><em style="width:auto;flex:1;color:var(--tx);white-space:normal">'+esc(x.wil)+' <span style="color:var(--mu);font-size:11px">'+esc(x.jenis)+' · '+esc(x.daop)+'</span></em><span class="b '+(x.sisa<0?"s-exp":x.sisa<=7?"s-bad":x.sisa<=30?"s-warn":"s-ok")+'">'+(x.sisa<0?"lewat "+(-x.sisa):x.sisa)+" hari</span></div>"}).join("")||'<div style="color:var(--mu)">Tidak ada yang perlu ditindaklanjuti</div>';
 sebaran(all);$("tb").innerHTML=rows.map(function(x,i){return"<tr><td>"+(i+1)+"</td><td>"+esc(x.jenis)+"</td><td>"+Number(x.kap).toLocaleString("id-ID")+"</td><td>"+esc(x.wil)+"</td><td>"+esc(x.daop)+"</td><td>"+esc(x.no)+"</td><td>"+fmt(x.terbit)+"</td><td>"+fmt(x.akhir)+'</td><td><span class="b '+cls(x.status)+'">'+x.status+"</span></td><td>"+x.sisa+'</td><td><span class="b '+(x.prio==="SANGAT URGENT"?"s-bad":x.prio==="TINGGI"?"s-warn":"s-ok")+'">'+x.prio+"</span></td><td>"+esc(x.lem)+"</td></tr>"}).join("")||'<tr><td colspan="12">Tidak ada data.</td></tr>';
 var d=new Date();$("clock").textContent="Diperbarui otomatis · "+d.toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" "+d.toLocaleTimeString("id-ID")+(META?" · Data Google Sheets diambil: "+new Date(META).toLocaleString("id-ID"):"")+MSG}

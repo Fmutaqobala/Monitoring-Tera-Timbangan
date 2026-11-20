@@ -44,11 +44,10 @@ td{padding:8px;border-top:1px solid var(--bd);vertical-align:top;font-size:12.5p
 <main>
 <div class="kpis" id="kpis"></div>
 <div class="row">
-<div class="card"><b>Status sertifikat</b><div id="byStatus"></div></div>
-<div class="card"><b>Jumlah timbangan per DAOP/DIVRE</b><div id="byDaop"></div></div>
-<div class="card"><b style="display:block;font-size:15px">PERLU TINDAK LANJUT</b><span style="display:block;font-size:11px;color:var(--mu);padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bd)">Sisa 30 hari atau kurang, termasuk kadaluarsa</span><div id="soon" style="max-height:260px;overflow-y:auto;padding-right:6px"></div></div>
+<div class="card"><b>Status sertifikat</b><div id="byStatus"></div></div><div class="card"><b style="display:block;font-size:15px">STATUS SERTIFIKAT</b><span style="display:block;font-size:11px;color:var(--mu);padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bd)">Persentase masa berlaku sertifikat</span><div id="byStatus"></div></div><div class="card"><b style="display:block;font-size:15px">JUMLAH TIMBANGAN PER DAOP/DIVRE</b><span style="display:block;font-size:11px;color:var(--mu);padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bd)">Sebaran jumlah timbangan di tiap wilayah</span><div id="byDaop"></div></div>
+<div class="card"><b style="display:block;font-size:15px">PERLU TINDAK LANJUT</b><span style="display:block;font-size:11px;color:var(--mu);padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bd)">Sisa 31 hari atau kurang, termasuk kadaluwarsa</span><div id="soon" style="max-height:260px;overflow-y:auto;padding-right:6px"></div></div>
 </div>
-<div class="card" style="margin-top:12px"><b>Sebaran jenis timbangan per DAOP/DIVRE</b><div id="byJenis"></div></div>
+<div class="card" style="margin-top:12px"><b style="display:block;font-size:15px">SEBARAN JENIS TIMBANGAN PER DAOP/DIVRE</b><span style="display:block;font-size:11px;color:var(--mu);padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bd)">Jenis timbangan dan jumlahnya di tiap wilayah</span><div id="byJenis"></div></div>
 <div class="tools">
 <input id="q" placeholder="Cari stasiun, no. sertifikat, lembaga…" size="32">
 <select id="fDaop"></select>
@@ -59,7 +58,7 @@ td{padding:8px;border-top:1px solid var(--bd);vertical-align:top;font-size:12.5p
 <input type="file" id="file" accept=".xlsx,.xls,.csv" hidden>
 </div>
 <div class="tw"><table><thead><tr id="thead"></tr></thead><tbody id="tb"></tbody></table></div>
-<p class="hint">Sisa hari, status, dan prioritas dihitung otomatis dari tanggal hari ini dan diperbarui setiap menit. Data diambil otomatis dari Google Sheets setiap 5 menit. Untuk memperbarui, cukup edit Google Sheets-nya. Aturan: ≤ 7 hari = Sangat Urgent, ≤ 30 hari = Tinggi (Segera Berakhir), sudah lewat = Kadaluarsa.</p>
+<p class="hint">Sisa hari, status, dan prioritas dihitung otomatis dari tanggal hari ini dan diperbarui setiap menit. Data diambil otomatis dari Google Sheets setiap 5 menit. Untuk memperbarui, cukup edit Google Sheets-nya. Aturan: ≤ 7 hari = Sangat Urgent, ≤ 31 hari = Tinggi (Segera Berakhir), sudah lewat = Kadaluarsa.</p>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
@@ -94,8 +93,8 @@ function $(i){return document.getElementById(i)}
 function today(){var d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
 function iso2d(s){var p=String(s).split("-");return new Date(+p[0],+p[1]-1,+p[2])}
 function calc(x){var s=Math.round((iso2d(x.akhir)-today())/864e5);
-var st=s<0?"KADALUARSA":s<=30?"SEGERA BERAKHIR":"BERLAKU";
-var pr=s<=7?"SANGAT URGENT":s<=30?"TINGGI":"NORMAL";
+var st=s<0?"KADALUARSA":s<=31?"SEGERA BERAKHIR":"BERLAKU";
+var pr=s<=7?"SANGAT URGENT":s<=31?"TINGGI":"NORMAL";
 return Object.assign({},x,{sisa:s,status:st,prio:pr})}
 function fmt(s){var m=["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"],d=iso2d(s);return d.getDate()+" "+m[d.getMonth()]+" "+d.getFullYear()}
 function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -121,7 +120,7 @@ donut("byStatus",[["Berlaku",n(function(x){return x.status==="BERLAKU"}),"var(--
 var dm={};all.forEach(function(x){dm[x.daop]=(dm[x.daop]||0)+1});
 bars("byDaop",Object.keys(dm).sort(function(a,b){return a.localeCompare(b,"id",{numeric:true})}).map(function(k){return[k,dm[k]]}),"var(--ac)");
 var sn=all.filter(function(x){return x.sisa<=31}).sort(function(a,b){return a.sisa-b.sisa});
-$("soon").innerHTML=sn.map(function(x){return'<div class="bar"><em style="width:auto;flex:1;color:var(--tx);white-space:normal">'+esc(x.wil)+' <span style="color:var(--mu);font-size:11px">'+esc(x.jenis)+' · '+esc(x.daop)+'</span></em><span class="b '+(x.sisa<0?"s-exp":x.sisa<=7?"s-bad":x.sisa<=30?"s-warn":"s-ok")+'">'+(x.sisa<0?"lewat "+(-x.sisa):x.sisa)+" hari</span></div>"}).join("")||'<div style="color:var(--mu)">Tidak ada yang perlu ditindaklanjuti</div>';
+$("soon").innerHTML=sn.map(function(x){return'<div class="bar"><em style="width:auto;flex:1;color:var(--tx);white-space:normal">'+esc(x.wil)+' <span style="color:var(--mu);font-size:11px">'+esc(x.jenis)+' · '+esc(x.daop)+'</span></em><span class="b '+(x.sisa<0?"s-exp":x.sisa<=7?"s-bad":x.sisa<=31?"s-warn":"s-ok")+'">'+(x.sisa<0?"lewat "+(-x.sisa):x.sisa)+" hari</span></div>"}).join("")||'<div style="color:var(--mu)">Tidak ada yang perlu ditindaklanjuti</div>';
 sebaran(all);$("tb").innerHTML=rows.map(function(x,i){return"<tr><td>"+(i+1)+"</td><td>"+esc(x.jenis)+"</td><td>"+Number(x.kap).toLocaleString("id-ID")+"</td><td>"+esc(x.wil)+"</td><td>"+esc(x.daop)+"</td><td>"+esc(x.no)+"</td><td>"+fmt(x.terbit)+"</td><td>"+fmt(x.akhir)+'</td><td><span class="b '+cls(x.status)+'">'+x.status+"</span></td><td>"+x.sisa+'</td><td><span class="b '+(x.prio==="SANGAT URGENT"?"s-bad":x.prio==="TINGGI"?"s-warn":"s-ok")+'">'+x.prio+"</span></td><td>"+esc(x.lem)+"</td></tr>"}).join("")||'<tr><td colspan="12">Tidak ada data.</td></tr>';
 var d=new Date();$("clock").textContent="Diperbarui otomatis · "+d.toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" "+d.toLocaleTimeString("id-ID")+(META?" · Data Google Sheets diambil: "+new Date(META).toLocaleString("id-ID"):"")+MSG}
 function fillJenis(){var s=$("fJenis"),v=s.value,l=[];data.forEach(function(x){if(x.jenis&&l.indexOf(x.jenis)<0)l.push(x.jenis)});l.sort();s.innerHTML='<option value="">Semua Jenis Timbangan</option>'+l.map(function(k){return"<option>"+esc(k)+"</option>"}).join("");s.value=v}

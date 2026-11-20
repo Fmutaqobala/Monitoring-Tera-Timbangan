@@ -52,9 +52,8 @@ td{padding:8px;border-top:1px solid var(--bd);vertical-align:top;font-size:12.5p
 <input id="q" placeholder="Cari stasiun, no. sertifikat, lembaga…" size="32">
 <select id="fDaop"></select>
 <select id="fStat"><option value="">Semua status</option><option>BERLAKU</option><option>SEGERA BERAKHIR</option><option>KADALUARSA</option></select>
-<button id="imp" hidden>Coba dari file Excel (lokal)</button>
-<button class="g" id="rst" hidden>Reset data contoh</button>
-<button class="g" id="csv">Unduh CSV</button>
+<select id="fJenis"><option value="">Semua Jenis Timbangan</option></select>
+<span style="display:none"><button id="imp"></button><button id="rst"></button><button id="csv"></button></span>
 <input type="file" id="file" accept=".xlsx,.xls,.csv" hidden>
 </div>
 <div class="tw"><table><thead><tr id="thead"></tr></thead><tbody id="tb"></tbody></table></div>
@@ -105,8 +104,8 @@ function cls(st){return st==="BERLAKU"?"s-ok":st==="SEGERA BERAKHIR"?"s-warn":"s
 function bars(el,items,color){var mx=Math.max.apply(null,items.map(function(i){return i[1]}).concat([1]));
 $(el).innerHTML=items.map(function(i){return'<div class="bar"><em title="'+esc(i[0])+'">'+esc(i[0])+'</em><i style="width:'+(i[1]/mx*55)+'%;background:'+(i[2]||color)+'"></i><span>'+i[1]+"</span></div>"}).join("")}
 function render(){
-var all=data.map(calc),q=$("q").value.toLowerCase(),fd=$("fDaop").value,fs=$("fStat").value;
-var rows=all.filter(function(x){return(!fd||x.daop===fd)&&(!fs||x.status===fs)&&(!q||[x.wil,x.no,x.lem,x.jenis].join(" ").toLowerCase().indexOf(q)>-1)});
+var all=data.map(calc),q=$("q").value.toLowerCase(),fd=$("fDaop").value,fs=$("fStat").value,fj=$("fJenis").value;
+var rows=all.filter(function(x){return(!fd||x.daop===fd)&&(!fs||x.status===fs)&&(!fj||x.jenis===fj)&&(!q||[x.wil,x.no,x.lem,x.jenis].join(" ").toLowerCase().indexOf(q)>-1)});
 rows.sort(function(a,b){var u=a[sortK],v=b[sortK];return(u>v?1:u<v?-1:0)*sortD});
 var n=function(f){return all.filter(f).length};
 $("kpis").innerHTML=[["Total timbangan",all.length,""],["Berlaku",n(function(x){return x.status==="BERLAKU"}),"var(--ok)"],["Segera berakhir",n(function(x){return x.status==="SEGERA BERAKHIR"}),"var(--warn)"],["Kadaluarsa",n(function(x){return x.status==="KADALUARSA"}),"#777"],["Sangat urgent",n(function(x){return x.prio==="SANGAT URGENT"}),"var(--bad)"]]
@@ -118,7 +117,8 @@ var sn=all.slice().sort(function(a,b){return a.sisa-b.sisa}).slice(0,5);
 $("soon").innerHTML=sn.map(function(x){return'<div class="bar"><em style="width:auto;flex:1;color:var(--tx)">'+esc(x.wil)+'</em><span class="b '+(x.sisa<0?"s-exp":x.sisa<=7?"s-bad":x.sisa<=30?"s-warn":"s-ok")+'">'+(x.sisa<0?"lewat "+(-x.sisa):x.sisa)+" hari</span></div>"}).join("");
 $("tb").innerHTML=rows.map(function(x,i){return"<tr><td>"+(i+1)+"</td><td>"+esc(x.jenis)+"</td><td>"+Number(x.kap).toLocaleString("id-ID")+"</td><td>"+esc(x.wil)+"</td><td>"+esc(x.daop)+"</td><td>"+esc(x.no)+"</td><td>"+fmt(x.terbit)+"</td><td>"+fmt(x.akhir)+'</td><td><span class="b '+cls(x.status)+'">'+x.status+"</span></td><td>"+x.sisa+'</td><td><span class="b '+(x.prio==="SANGAT URGENT"?"s-bad":x.prio==="TINGGI"?"s-warn":"s-ok")+'">'+x.prio+"</span></td><td>"+esc(x.lem)+"</td></tr>"}).join("")||'<tr><td colspan="12">Tidak ada data.</td></tr>';
 var d=new Date();$("clock").textContent="Diperbarui otomatis · "+d.toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" "+d.toLocaleTimeString("id-ID")+(META?" · Data Google Sheets diambil: "+new Date(META).toLocaleString("id-ID"):"")+MSG}
-function fillDaop(){var s=$("fDaop"),v=s.value,l=[];data.forEach(function(x){if(l.indexOf(x.daop)<0)l.push(x.daop)});l.sort();
+function fillJenis(){var s=$("fJenis"),v=s.value,l=[];data.forEach(function(x){if(x.jenis&&l.indexOf(x.jenis)<0)l.push(x.jenis)});l.sort();s.innerHTML='<option value="">Semua Jenis Timbangan</option>'+l.map(function(k){return"<option>"+esc(k)+"</option>"}).join("");s.value=v}
+function fillDaop(){fillJenis();var s=$("fDaop"),v=s.value,l=[];data.forEach(function(x){if(l.indexOf(x.daop)<0)l.push(x.daop)});l.sort();
 s.innerHTML='<option value="">Semua DAOP</option>'+l.map(function(k){return"<option>"+esc(k)+"</option>"}).join("");s.value=v}
 function toIso(v){if(v instanceof Date)return v.getFullYear()+"-"+("0"+(v.getMonth()+1)).slice(-2)+"-"+("0"+v.getDate()).slice(-2);
 if(/^\d{4}-\d{2}-\d{2}/.test(String(v)))return String(v).slice(0,10);var m={jan:1,feb:2,mar:3,apr:4,mei:5,may:5,jun:6,jul:7,agu:8,aug:8,sep:9,okt:10,oct:10,nov:11,des:12,dec:12};
@@ -144,7 +144,7 @@ $("rst").onclick=function(){data=SAMPLE.slice();save();fillDaop();render()};
 $("csv").onclick=function(){var rows=data.map(calc),h=COLS.map(function(c){return c[1]});
 var s=[h.join(",")].concat(rows.map(function(x){return COLS.map(function(c){return'"'+String(x[c[0]]).replace(/"/g,'""')+'"'}).join(",")})).join("\n");
 var a=document.createElement("a");a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(s);a.download="tera-timbangan.csv";a.click()};
-["q","fDaop","fStat"].forEach(function(i){$(i).oninput=render});
+["q","fDaop","fStat","fJenis"].forEach(function(i){$(i).oninput=render});
 fillDaop();render();setInterval(render,60000);
 showAdm();pull();setInterval(pull,300000);
 </script>

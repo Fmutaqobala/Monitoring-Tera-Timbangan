@@ -52,6 +52,7 @@ td{padding:8px;border-top:1px solid var(--bd);vertical-align:top;font-size:12.5p
 <input id="q" placeholder="Cari stasiun, no. sertifikat, lembaga…" size="32">
 <select id="fDaop"></select>
 <select id="fStat"><option value="">Semua status</option><option>BERLAKU</option><option>SEGERA BERAKHIR</option><option>KADALUARSA</option></select>
+<select id="fPrio"><option value="">Semua prioritas</option><option>SANGAT URGENT</option><option>TINGGI</option><option>NORMAL</option></select>
 <select id="fJenis"><option value="">Semua Jenis Timbangan</option></select>
 <span style="display:none"><button id="imp"></button><button id="rst"></button><button id="csv"></button></span>
 <input type="file" id="file" accept=".xlsx,.xls,.csv" hidden>
@@ -106,8 +107,8 @@ $(el).innerHTML=items.map(function(i){return'<div class="bar"><em title="'+esc(i
 function donut(el,items){var n0=items.reduce(function(a,i){return a+i[1]},0),t=n0||1,p=0,g=items.map(function(i){var s=p;p+=i[1]/t*100;return i[2]+" "+s+"% "+p+"%"}).join(",");
 $(el).innerHTML='<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap"><div style="width:150px;height:150px;border-radius:50%;background:conic-gradient('+g+');display:flex;align-items:center;justify-content:center"><div style="width:92px;height:92px;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center"><b style="font-size:22px">'+n0+'</b><span style="font-size:11px;color:var(--mu)">timbangan</span></div></div><div>'+items.map(function(i){return'<div class="bar"><i style="width:12px;min-width:12px;height:12px;border-radius:50%;background:'+i[2]+'"></i><span><b>'+(i[1]/t*100).toFixed(1)+'%</b> '+i[0]+' ('+i[1]+')</span></div>'}).join("")+'</div></div>'}
 function render(){
-var all=data.map(calc),q=$("q").value.toLowerCase(),fd=$("fDaop").value,fs=$("fStat").value,fj=$("fJenis").value;
-var rows=all.filter(function(x){return(!fd||x.daop===fd)&&(!fs||x.status===fs)&&(!fj||x.jenis===fj)&&(!q||[x.wil,x.no,x.lem,x.jenis].join(" ").toLowerCase().indexOf(q)>-1)});
+var all=data.map(calc),q=$("q").value.toLowerCase(),fd=$("fDaop").value,fs=$("fStat").value,fj=$("fJenis").value,fp=$("fPrio").value;
+var rows=all.filter(function(x){return(!fd||x.daop===fd)&&(!fs||x.status===fs)&&(!fj||x.jenis===fj)&&(!fp||x.prio===fp)&&(!q||[x.wil,x.no,x.lem,x.jenis].join(" ").toLowerCase().indexOf(q)>-1)});
 rows.sort(function(a,b){var u=a[sortK],v=b[sortK];return(u>v?1:u<v?-1:0)*sortD});
 var n=function(f){return all.filter(f).length};
 $("kpis").innerHTML=[["Total timbangan",all.length,""],["Berlaku",n(function(x){return x.status==="BERLAKU"}),"var(--ok)"],["Segera berakhir",n(function(x){return x.status==="SEGERA BERAKHIR"}),"var(--warn)"],["Kadaluarsa",n(function(x){return x.status==="KADALUARSA"}),"#777"],["Sangat urgent",n(function(x){return x.prio==="SANGAT URGENT"}),"var(--bad)"]]
@@ -146,7 +147,7 @@ $("rst").onclick=function(){data=SAMPLE.slice();save();fillDaop();render()};
 $("csv").onclick=function(){var rows=data.map(calc),h=COLS.map(function(c){return c[1]});
 var s=[h.join(",")].concat(rows.map(function(x){return COLS.map(function(c){return'"'+String(x[c[0]]).replace(/"/g,'""')+'"'}).join(",")})).join("\n");
 var a=document.createElement("a");a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(s);a.download="tera-timbangan.csv";a.click()};
-["q","fDaop","fStat","fJenis"].forEach(function(i){$(i).oninput=render});
+["q","fDaop","fStat","fJenis","fPrio"].forEach(function(i){$(i).oninput=render});
 fillDaop();render();setInterval(render,60000);
 showAdm();pull();setInterval(pull,300000);
 </script>

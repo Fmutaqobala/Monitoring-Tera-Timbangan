@@ -3,48 +3,51 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dashboard Tera Timbangan Wilayah Jawa dan Sumatera</title>
+<title>Dashboard Tera Timbangan Wilayah Jawa dan Sumatera (KAI)</title>
 <style>
-:root{--bg:#f6f3ef;--card:#fff;--tx:#25211d;--mu:#6f6862;--bd:#e4ddd5;--ac:#e8702a;--ok:#2e9e4f;--warn:#e0a800;--bad:#d62828;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1917;--card:#262321;--tx:#f1ece6;--mu:#a39a91;--bd:#3a3531;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#1b1917;--card:#262321;--tx:#f1ece6;--mu:#a39a91;--bd:#3a3531;color-scheme:dark}
+:root{--bg:#0C1830;--card:#15264A;--tx:#F2F5FB;--mu:#A9B6D0;--bd:#2A3D66;--ac:#F26B21;--ok:#2E9E4F;--warn:#F5B301;--bad:#D32F2F;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:linear-gradient(rgba(27,25,23,.9),rgba(27,25,23,.9)),url("bg.jpg") center/cover fixed;color:var(--tx);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-header{background:linear-gradient(90deg,rgba(232,112,42,.93),rgba(232,112,42,.6)),url("bg.jpg") center/cover;color:#fff;padding:16px 20px}
-header h1{margin:0;font-size:18px}
-header p{margin:4px 0 0;font-size:12px;opacity:.9}
-main{padding:16px 20px;max-width:1300px;margin:auto}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:linear-gradient(90deg,rgba(12,24,48,.97) 0%,rgba(12,24,48,.88) 60%,rgba(242,107,33,.6) 100%),url("bg.jpg") center/cover,#101F3F;border-bottom:4px solid var(--ac);padding:20px 24px;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+header h1{margin:0;font-size:19px;letter-spacing:.3px}
+header p{margin:4px 0 0;font-size:12px;color:var(--mu)}
+main{padding:18px 24px;max-width:1400px;margin:auto}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px}
-.kpi b{display:block;font-size:28px;line-height:1.1}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px}
+.kpi{border-top:4px solid var(--ac)}
+.kpi b{display:block;font-size:30px;line-height:1.1;margin-top:2px}
 .kpi span{color:var(--mu);font-size:12px}
 .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:12px}
 .bar{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:12px}
 .bar i{display:block;height:14px;border-radius:4px;min-width:2px}
 .bar em{width:110px;font-style:normal;color:var(--mu);flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tools{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 8px}
-input,select,button{font:inherit;padding:7px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
-button{cursor:pointer;background:var(--ac);color:#fff;border-color:var(--ac)}
-button.g{background:var(--card);color:var(--tx);border-color:var(--bd)}
-.tw{overflow-x:auto;border:1px solid var(--bd);border-radius:10px;background:var(--card)}
+input,select,button{font:inherit;padding:7px 10px;border:1px solid var(--bd);border-radius:8px;background:#0F1E3D;color:var(--tx)}
+button{cursor:pointer;background:var(--ac);color:#0C1830;border-color:var(--ac)}
+.tw{overflow-x:auto;border:1px solid var(--bd);border-radius:12px;background:var(--card)}
 table{border-collapse:collapse;width:100%;min-width:980px}
-th{background:var(--ac);color:#fff;text-align:left;padding:8px;font-size:12px;position:sticky;top:0;cursor:pointer;white-space:nowrap}
-td{padding:8px;border-top:1px solid var(--bd);vertical-align:top;font-size:12.5px}
-.b{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600;color:#fff;white-space:nowrap}
-.s-ok{background:var(--ok)}.s-warn{background:var(--warn);color:#222}.s-bad{background:var(--bad)}.s-exp{background:#555}
+th{background:var(--ac);color:#0C1830;text-align:left;padding:9px 8px;font-size:12px;position:sticky;top:0;cursor:pointer;white-space:nowrap}
+td{padding:9px 8px;border-top:1px solid var(--bd);vertical-align:top;font-size:12.5px}
+tbody tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+.b{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700;color:#fff;white-space:nowrap}
+.s-ok{background:var(--ok)}.s-warn{background:var(--warn);color:#0C1830}.s-bad{background:var(--bad)}.s-exp{background:#5B6784}
+.kpi small{display:block;font-size:11px;margin-top:2px}
+tbody tr.u td{background:rgba(211,47,47,.12)}tbody tr.u td:first-child{box-shadow:inset 4px 0 0 var(--bad)}
+tbody tr.h td:first-child{box-shadow:inset 4px 0 0 var(--warn)}
 .hint{color:var(--mu);font-size:12px;margin-top:8px}
 </style>
 </head>
 <body>
 <header>
-<h1>MASA BERLAKU SERTIFIKAT TERA TIMBANGAN WILAYAH JAWA DAN SUMATERA</h1>
+<h1>MASA BERLAKU SERTIFIKAT TERA TIMBANGAN WILAYAH JAWA DAN SUMATERA (KAI)</h1>
 <p id="clock"></p>
 </header>
 <main>
 <div class="kpis" id="kpis"></div>
 <div class="row">
-<div class="card"><b style="display:block;font-size:15px">STATUS SERTIFIKAT</b><span style="display:block;font-size:11px;color:var(--mu);padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bd)">Persentase masa berlaku sertifikat</span><div id="byStatus"></div></div><div class="card"><b style="display:block;font-size:15px">JUMLAH TIMBANGAN PER DAOP/DIVRE</b><span style="display:block;font-size:11px;color:var(--mu);padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bd)">Sebaran jumlah timbangan di tiap wilayah</span><div id="byDaop"></div></div><div class="card"><b style="display:block;font-size:15px">PERLU TINDAK LANJUT</b><span style="display:block;font-size:11px;color:var(--mu);padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bd)">Sisa 31 hari atau kurang, termasuk kadaluwarsa</span><div id="soon" style="max-height:260px;overflow-y:auto;padding-right:6px"></div></div>
+<div class="card"><b style="display:block;font-size:15px">STATUS SERTIFIKAT</b><span style="display:block;font-size:11px;color:var(--mu);padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bd)">Persentase masa berlaku sertifikat</span><div id="byStatus"></div></div>
+<div class="card"><b style="display:block;font-size:15px">JUMLAH TIMBANGAN PER DAOP/DIVRE</b><span style="display:block;font-size:11px;color:var(--mu);padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bd)">Sebaran jumlah timbangan di tiap wilayah</span><div id="byDaop"></div></div>
+<div class="card"><b style="display:block;font-size:15px">PERLU TINDAK LANJUT</b><span style="display:block;font-size:11px;color:var(--mu);padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bd)">Sisa 31 hari atau kurang, termasuk kadaluarsa</span><div id="soon" style="max-height:260px;overflow-y:auto;padding-right:6px"></div></div>
 </div>
 <div class="card" style="margin-top:12px"><b style="display:block;font-size:15px">SEBARAN JENIS TIMBANGAN PER DAOP/DIVRE</b><span style="display:block;font-size:11px;color:var(--mu);padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bd)">Jenis timbangan dan jumlahnya di tiap wilayah</span><div id="byJenis"></div><div id="detJ"></div></div>
 <div class="tools">
@@ -105,13 +108,14 @@ function bars(el,items,color){var mx=Math.max.apply(null,items.map(function(i){r
 $(el).innerHTML=items.map(function(i){return'<div class="bar"><em title="'+esc(i[0])+'">'+esc(i[0])+'</em><i style="width:'+(i[1]/mx*55)+'%;background:'+(i[2]||color)+'"></i><span>'+i[1]+"</span></div>"}).join("")}
 function donut(el,items){var n0=items.reduce(function(a,i){return a+i[1]},0),t=n0||1,p=0,g=items.map(function(i){var s=p;p+=i[1]/t*100;return i[2]+" "+s+"% "+p+"%"}).join(",");
 $(el).innerHTML='<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap"><div style="width:150px;height:150px;border-radius:50%;background:conic-gradient('+g+');display:flex;align-items:center;justify-content:center"><div style="width:92px;height:92px;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center"><b style="font-size:22px">'+n0+'</b><span style="font-size:11px;color:var(--mu)">timbangan</span></div></div><div>'+items.map(function(i){return'<div class="bar"><i style="width:12px;min-width:12px;height:12px;border-radius:50%;background:'+i[2]+'"></i><span><b>'+(i[1]/t*100).toFixed(1)+'%</b> '+i[0]+' ('+i[1]+')</span></div>'}).join("")+'</div></div>'}
+function fillJenis(){var s=$("fJenis"),v=s.value,l=[];data.forEach(function(x){if(x.jenis&&l.indexOf(x.jenis)<0)l.push(x.jenis)});l.sort(function(a,b){return a.localeCompare(b,"id",{numeric:true})});s.innerHTML='<option value="">Semua Jenis Timbangan</option>'+l.map(function(k){return"<option>"+esc(k)+"</option>"}).join("");s.value=v}
 function sebaran(all){var m={},nat=function(a,b){return a.localeCompare(b,"id",{numeric:true})};all.forEach(function(x){var j=x.jenis||"-";m[j]=m[j]||{};m[j][x.daop]=(m[j][x.daop]||0)+1});
 $("byJenis").innerHTML=Object.keys(m).sort(nat).map(function(j){var d=m[j],ks=Object.keys(d).sort(nat),tot=ks.reduce(function(a,k){return a+d[k]},0);
-return'<div style="padding:10px 0;border-top:1px solid var(--bd)"><b>'+esc(j)+'</b> <span style="color:var(--mu);font-size:12px">('+tot+' unit di '+ks.length+' wilayah)</span><div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px">'+ks.map(function(k){return'<span class="pl" data-j="'+esc(j)+'" data-d="'+esc(k)+'" style="cursor:pointer;display:inline-flex;border:1px solid var(--ac);border-radius:99px;overflow:hidden;font-size:12px"><b style="padding:3px 10px">'+esc(k)+'</b><b style="padding:3px 10px;background:var(--ac);color:#14284B">'+d[k]+'</b></span>'}).join("")+'</div></div>'}).join("")}
+return'<div style="padding:10px 0;border-top:1px solid var(--bd)"><b>'+esc(j)+'</b> <span style="color:var(--mu);font-size:12px">('+tot+' unit di '+ks.length+' wilayah)</span><div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px">'+ks.map(function(k){return'<span class="pl" data-j="'+esc(j)+'" data-d="'+esc(k)+'" style="cursor:pointer;display:inline-flex;border:1px solid var(--ac);border-radius:99px;overflow:hidden;font-size:12px"><b style="padding:3px 10px">'+esc(k)+'</b><b style="padding:3px 10px;background:var(--ac);color:#0C1830">'+d[k]+'</b></span>'}).join("")+'</div></div>'}).join("")||'<div style="color:var(--mu)">Belum ada data</div>'}
 var SEL=null,ALL=[];
 function showDet(all){ALL=all;var el=$("detJ");if(!SEL){el.innerHTML="";return}
 var l=all.filter(function(x){return x.jenis===SEL[0]&&x.daop===SEL[1]}).sort(function(a,b){return a.sisa-b.sisa});
-el.innerHTML='<div style="margin-top:12px;padding:12px;border:1px solid var(--ac);border-radius:10px"><div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:6px"><b>'+esc(SEL[0])+' · '+esc(SEL[1])+' <span style="color:var(--mu);font-weight:400">('+l.length+' unit)</span></b><span id="detX" style="cursor:pointer;background:var(--ac);color:#14284B;padding:4px 12px;border-radius:8px;font-weight:700;font-size:12px;white-space:nowrap">✕ Close</span></div>'+l.map(function(x){return'<div class="bar" style="justify-content:space-between"><span>'+esc(x.wil)+' <span style="color:var(--mu);font-size:11px">· '+Number(x.kap).toLocaleString("id-ID")+' kg · '+esc(x.no)+'</span></span><span class="b '+(x.sisa<0?"s-exp":x.sisa<=7?"s-bad":x.sisa<=31?"s-warn":"s-ok")+'">'+(x.sisa<0?"lewat "+(-x.sisa):x.sisa)+' hari</span></div>'}).join("")+'</div>'}
+el.innerHTML='<div style="margin-top:12px;padding:12px;border:1px solid var(--ac);border-radius:10px"><div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:6px"><b>'+esc(SEL[0])+' · '+esc(SEL[1])+' <span style="color:var(--mu);font-weight:400">('+l.length+' unit)</span></b><span id="detX" style="cursor:pointer;background:var(--ac);color:#0C1830;padding:4px 12px;border-radius:8px;font-weight:700;font-size:12px;white-space:nowrap">✕ Close</span></div>'+l.map(function(x){return'<div class="bar" style="justify-content:space-between"><span>'+esc(x.wil)+' <span style="color:var(--mu);font-size:11px">· '+Number(x.kap).toLocaleString("id-ID")+' kg · '+esc(x.no)+'</span></span><span class="b '+(x.sisa<0?"s-exp":x.sisa<=7?"s-bad":x.sisa<=31?"s-warn":"s-ok")+'">'+(x.sisa<0?"lewat "+(-x.sisa):x.sisa)+' hari</span></div>'}).join("")+'</div>'}
 $("byJenis").onclick=function(e){var p=e.target.closest(".pl");if(!p)return;var k=[p.dataset.j,p.dataset.d];SEL=SEL&&SEL[0]===k[0]&&SEL[1]===k[1]?null:k;showDet(ALL)};
 $("detJ").onclick=function(e){if(e.target.id==="detX"){SEL=null;showDet(ALL)}};
 function render(){
@@ -120,15 +124,14 @@ var rows=all.filter(function(x){return(!fd||x.daop===fd)&&(!fs||x.status===fs)&&
 rows.sort(function(a,b){var u=a[sortK],v=b[sortK];return(u>v?1:u<v?-1:0)*sortD});
 var n=function(f){return all.filter(f).length};
 $("kpis").innerHTML=[["Total timbangan",all.length,""],["Berlaku",n(function(x){return x.status==="BERLAKU"}),"var(--ok)"],["Segera berakhir",n(function(x){return x.status==="SEGERA BERAKHIR"}),"var(--warn)"],["Kadaluarsa",n(function(x){return x.status==="KADALUARSA"}),"#777"],["Sangat urgent",n(function(x){return x.prio==="SANGAT URGENT"}),"var(--bad)"]]
-.map(function(k){return'<div class="card kpi"><span>'+k[0]+"</span><b"+(k[2]?' style="color:'+k[2]+'"':"")+">"+k[1]+"</b></div>"}).join("");
+.map(function(k){var pc=k[0]==="Total timbangan"?"":'<small style="color:var(--mu)">'+(all.length?(k[1]/all.length*100).toFixed(1):0)+'% dari total</small>';return'<div class="card kpi" style="border-top-color:'+(k[2]||"var(--ac)")+(k[0]==="Sangat urgent"?";background:linear-gradient(rgba(211,47,47,.16),rgba(211,47,47,.16)),var(--card)":"")+'"><span>'+k[0]+"</span><b"+(k[2]?' style="color:'+k[2]+'"':"")+">"+k[1]+"</b>"+pc+"</div>"}).join("");
 donut("byStatus",[["Berlaku",n(function(x){return x.status==="BERLAKU"}),"var(--ok)"],["Segera berakhir",n(function(x){return x.status==="SEGERA BERAKHIR"}),"var(--warn)"],["Kadaluarsa",n(function(x){return x.status==="KADALUARSA"}),"#777"]]);
 var dm={};all.forEach(function(x){dm[x.daop]=(dm[x.daop]||0)+1});
 bars("byDaop",Object.keys(dm).sort(function(a,b){return a.localeCompare(b,"id",{numeric:true})}).map(function(k){return[k,dm[k]]}),"var(--ac)");
 var sn=all.filter(function(x){return x.sisa<=31}).sort(function(a,b){return a.sisa-b.sisa});
 $("soon").innerHTML=sn.map(function(x){return'<div class="bar"><em style="width:auto;flex:1;color:var(--tx);white-space:normal">'+esc(x.wil)+' <span style="color:var(--mu);font-size:11px">'+esc(x.jenis)+' · '+esc(x.daop)+'</span></em><span class="b '+(x.sisa<0?"s-exp":x.sisa<=7?"s-bad":x.sisa<=31?"s-warn":"s-ok")+'">'+(x.sisa<0?"lewat "+(-x.sisa):x.sisa)+" hari</span></div>"}).join("")||'<div style="color:var(--mu)">Tidak ada yang perlu ditindaklanjuti</div>';
-sebaran(all);showDet(all);$("tb").innerHTML=rows.map(function(x,i){return"<tr><td>"+(i+1)+"</td><td>"+esc(x.jenis)+"</td><td>"+Number(x.kap).toLocaleString("id-ID")+"</td><td>"+esc(x.wil)+"</td><td>"+esc(x.daop)+"</td><td>"+esc(x.no)+"</td><td>"+fmt(x.terbit)+"</td><td>"+fmt(x.akhir)+'</td><td><span class="b '+cls(x.status)+'">'+x.status+"</span></td><td>"+x.sisa+'</td><td><span class="b '+(x.prio==="SANGAT URGENT"?"s-bad":x.prio==="TINGGI"?"s-warn":"s-ok")+'">'+x.prio+"</span></td><td>"+esc(x.lem)+"</td></tr>"}).join("")||'<tr><td colspan="12">Tidak ada data.</td></tr>';
+sebaran(all);showDet(all);$("tb").innerHTML=rows.map(function(x,i){return"<tr"+(x.prio==="SANGAT URGENT"?' class="u"':x.prio==="TINGGI"?' class="h"':"")+"><td>"+(i+1)+"</td><td>"+esc(x.jenis)+"</td><td>"+Number(x.kap).toLocaleString("id-ID")+"</td><td>"+esc(x.wil)+"</td><td>"+esc(x.daop)+"</td><td>"+esc(x.no)+"</td><td>"+fmt(x.terbit)+"</td><td>"+fmt(x.akhir)+'</td><td><span class="b '+cls(x.status)+'">'+x.status+"</span></td><td>"+x.sisa+'</td><td><span class="b '+(x.prio==="SANGAT URGENT"?"s-bad":x.prio==="TINGGI"?"s-warn":"s-ok")+'">'+x.prio+"</span></td><td>"+esc(x.lem)+"</td></tr>"}).join("")||'<tr><td colspan="12">Tidak ada data.</td></tr>';
 var d=new Date();$("clock").textContent="Diperbarui otomatis · "+d.toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" "+d.toLocaleTimeString("id-ID")+(META?" · Data Google Sheets diambil: "+new Date(META).toLocaleString("id-ID"):"")+MSG}
-function fillJenis(){var s=$("fJenis"),v=s.value,l=[];data.forEach(function(x){if(x.jenis&&l.indexOf(x.jenis)<0)l.push(x.jenis)});l.sort();s.innerHTML='<option value="">Semua Jenis Timbangan</option>'+l.map(function(k){return"<option>"+esc(k)+"</option>"}).join("");s.value=v}
 function fillDaop(){fillJenis();var s=$("fDaop"),v=s.value,l=[];data.forEach(function(x){if(l.indexOf(x.daop)<0)l.push(x.daop)});l.sort(function(a,b){return a.localeCompare(b,"id",{numeric:true})});
 s.innerHTML='<option value="">Semua DAOP/DIVRE</option>'+l.map(function(k){return"<option>"+esc(k)+"</option>"}).join("");s.value=v}
 function toIso(v){if(v instanceof Date)return v.getFullYear()+"-"+("0"+(v.getMonth()+1)).slice(-2)+"-"+("0"+v.getDate()).slice(-2);
@@ -143,9 +146,10 @@ var out=[];for(var j=h+1;j<a.length;j++){var w=a[j],t=toIso(w[dts[0]]),e2=toIso(
 out.push({jenis:w[ix.jenis],kap:Number(String(w[ix.kap]).replace(/[.,]/g,""))||0,wil:w[ix.wil],daop:String(w[ix.daop]||"").trim().toUpperCase(),no:w[ix.no],terbit:t||e2,akhir:e2,lem:w[ix.lem]})}
 if(!out.length)throw new Error("Tidak ada baris data valid");return out}
 function csv(t){var r=[],row=[],c="",q=false;for(var i=0;i<t.length;i++){var ch=t[i];if(q){if(ch==='"'){if(t[i+1]==='"'){c+='"';i++}else q=false}else c+=ch}else if(ch==='"')q=true;else if(ch===","){row.push(c);c=""}else if(ch==="\n"||ch==="\r"){if(ch==="\r"&&t[i+1]==="\n")i++;row.push(c);r.push(row);row=[];c=""}else c+=ch}if(c!==""||row.length){row.push(c);r.push(row)}return r}
+function fixNama(x){var z=function(t){return String(t==null?"":t).replace(/[\s\u00a0\u200b-\u200d\ufeff]+/g," ").trim()};x.jenis=z(x.jenis).toLowerCase().replace(/\b\w/g,function(c){return c.toUpperCase()});x.daop=z(x.daop).toUpperCase();return x}
 async function pull(){if(!SHEET_CSV){MSG=" \u00b7 Mode contoh (link Google Sheets belum diisi)";render();return}
 try{var res=await fetch(SHEET_CSV+(SHEET_CSV.indexOf("?")>-1?"&":"?")+"t="+Date.now(),{cache:"no-store"});if(!res.ok)throw new Error("HTTP "+res.status);
-data=parseRows(csv(await res.text()));META=new Date().toISOString();MSG="";fillDaop();render()}
+data=parseRows(csv(await res.text())).map(fixNama);META=new Date().toISOString();MSG="";fillDaop();render()}
 catch(e){MSG=" \u00b7 Gagal mengambil Google Sheets ("+e.message+"), menampilkan data terakhir";render()}}
 $("file").onchange=function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();
 rd.onload=function(){try{var wb=XLSX.read(rd.result,{type:"array",cellDates:true}),ws=wb.Sheets[wb.SheetNames[0]];

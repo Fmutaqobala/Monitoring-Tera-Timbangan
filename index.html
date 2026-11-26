@@ -93,7 +93,7 @@ var KEY="kai-tera-v1",data=load(),sortK="sisa",sortD=1;
 function load(){try{var s=localStorage.getItem(KEY);if(s)return JSON.parse(s)}catch(e){}return SAMPLE.slice()}
 var DB=null,CAN=false,META=null,MSG="";
 // === ISI LINK CSV GOOGLE SHEETS DI SINI (lihat panduan) ===
-var SHEET_CSV=https://docs.google.com/spreadsheets/d/e/2PACX-1vRz0q-osAT7Di9zghx9M_kj4d295_e27TjsUCwQEPt6ZHLNfH-UkNbq7ammTK7Xbg/pub?gid=635624954&single=true&output=csv;
+var SHEET_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRz0q-osAT7Di9zghx9M_kj4d295_e27TjsUCwQEPt6ZHLNfH-UkNbq7ammTK7Xbg/pub?gid=635624954&single=true&output=csv";
 function save(){if(DB&&CAN){DB.doc("tera/data").set({rows:data,updatedAt:new Date().toISOString()}).catch(function(e){alert("Gagal menyimpan ke server: "+(e&&e.message||e))})}else{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}}}
 function showAdm(){$("imp").hidden=false;$("rst").hidden=false}
 function $(i){return document.getElementById(i)}
